@@ -12,8 +12,8 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: ~/.ccache
-          key: ccache-${{ job.container }}-${{ steps.time.outputs.time }}
-          restore-keys: ccache-${{ job.container }}- 
+          key: ccache-${{ job.container.image }}-${{ steps.time.outputs.time }}
+          restore-keys: ccache-${{ job.container.image }}
       - uses: actions/checkout@master
       - name: SetupEnv
         run: ccache -z
