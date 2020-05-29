@@ -14,7 +14,6 @@ jobs:
           path: ~/.ccache
           key: ccache-${{ job.container }}-${{ steps.time.outputs.time }}
           restore-keys: ccache-${{ job.container }}- 
-        ${ { matrix.config.name } }-ccache-dd
       - uses: actions/checkout@master
       - name: SetupEnv
         run: ccache -z
