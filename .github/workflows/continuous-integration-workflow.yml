@@ -4,6 +4,7 @@ on: [push]
 jobs:
   CI:
     runs-on: ubuntu-latest
+    containter: votca/buildenv:latest
     steps:
       - uses: actions/checkout@master
       - name: SetupEnv
