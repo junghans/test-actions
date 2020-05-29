@@ -6,6 +6,15 @@ jobs:
     runs-on: ubuntu-latest
     container: votca/buildenv:latest
     steps:
+      - name: Get time
+        id: time
+        run: echo "::set-output name=time::$(date +%s)" 
+      - uses: actions/cache@v2
+        with:
+          path: ~/.ccache
+          key: ccache-${{ job.container }}-${{ steps.time.outputs.time }}
+          restore-keys: ccache-${{ job.container }}- 
+        ${ { matrix.config.name } }-ccache-dd
       - uses: actions/checkout@master
       - name: SetupEnv
         run: ccache -z
