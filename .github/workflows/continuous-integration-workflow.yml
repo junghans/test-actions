@@ -7,7 +7,7 @@ jobs:
       matrix:
         x: ['1', '2', '3']
         include:
-          - x: 4
+          - x: ['4', '5']
             m: 0
     runs-on: ubuntu-latest
     env:
