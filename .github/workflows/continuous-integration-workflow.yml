@@ -7,8 +7,8 @@ jobs:
       matrix:
         x: ['1', '2', '3']
         include:
-          x: 4
-          m: 0
+          - x: 4
+            m: 0
     runs-on: ubuntu-latest
     container: votca/buildenv:latest
     env:
