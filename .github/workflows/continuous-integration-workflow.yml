@@ -10,7 +10,6 @@ jobs:
           - x: 4
             m: 0
     runs-on: ubuntu-latest
-    container: votca/buildenv:latest
     env:
       X: ${{ matrix.x }}
       M: ${{ matrix.m }}
