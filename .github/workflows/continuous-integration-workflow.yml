@@ -15,20 +15,8 @@ jobs:
       X: ${{ matrix.x }}
       M: ${{ matrix.m }}
     steps:
-      - name: Get time
-        id: time
-        run: echo "::set-output name=time::$(date +%s)" 
-      - uses: actions/cache@v2
-        with:
-          path: ~/.ccache
-          key: ccache-${{ fromJson(job.container.image) }}-${{ steps.time.outputs.time }}
-          restore-keys: ccache-${{ fromJson(job.container.image) }}
       - uses: actions/checkout@master
-      - name: SetupEnv
-        run: ccache -z
       - name: Build
         run: |
           gcc -c main.c
           echo $X vs. $M
-      - name: Ccache sum
-        run: ccache -s
