@@ -24,6 +24,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: CI
     steps:
-      name: Meh
-      run: |
-        ls
+      - name: Meh
+        run: |
+          ls
