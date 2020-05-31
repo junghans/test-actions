@@ -14,12 +14,10 @@ jobs:
     env:
       X: ${{ matrix.x }}
       M: ${{ matrix.m }}
-      R: ${{ ! startsWith(matrix.x,'1') }}
-      ccache-hash: ${{ matrix.x }}-${{ matrix.m }}
+      B: ${{ ! matrix.R }}
     steps:
       - uses: actions/checkout@master
       - name: Build
         run: |
           gcc -c main.c
-          echo "X='$X',  M='$M', R='$R'"
-          echo "${{ env.ccache-hash }}"
+          echo "X='$X',  M='$M', R='$R', B='$B'"
