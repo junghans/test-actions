@@ -9,4 +9,4 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - --build-arg DISTRO=${{ inputs.distro }}
+    - DISTRO=${{ inputs.distro }}
