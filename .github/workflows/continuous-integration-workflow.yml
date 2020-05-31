@@ -3,26 +3,11 @@ on: [push]
 
 jobs:
   CI:
-    strategy:
-      matrix:
-        x: ['1', '2', '3']
-        include:
-          - x: '11'
-            m: 0
-            R: true
-    runs-on: ubuntu-latest
-    env:
-      X: ${{ matrix.x }}
-      M: ${{ matrix.m }}
-      B: ${{ matrix.R == true }}
     steps:
       - uses: actions/checkout@master
-      - name: Build
-        run: |
-          gcc -c main.c
-          echo "X='$X',  M='$M', R='$R', B='$B'"
       - name: Git magic
         run: |
+          mkdir ~/.ssh
           echo "${{ secrets.SSH_DEPLOY_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           git remote -v
