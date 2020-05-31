@@ -1,5 +1,10 @@
-name: CI
-on: [push]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   CI:
@@ -13,7 +18,12 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           git config --global user.email "junghans@votca.org"
           git config --global user.name "Christoph Junghans"
+          git show
           date > file
-          git add file
-          git commit -m "update file"
-          git push origin master
+  Deploy:
+    runs-on: ubuntu-latest
+    needs: CI
+    steps:
+      name: Meh
+      run: |
+        ls
