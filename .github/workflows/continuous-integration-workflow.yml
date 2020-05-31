@@ -14,10 +14,14 @@ jobs:
     env:
       X: ${{ matrix.x }}
       M: ${{ matrix.m }}
-      B: ${{ true && ! matrix.R }}
+      B: ${{ boolean(matrix.R) }}
     steps:
       - uses: actions/checkout@master
       - name: Build
+        run: |
+          gcc -c main.c
+          echo "X='$X',  M='$M', R='$R', B='$B'"
+      - name: Build Again
         run: |
           gcc -c main.c
           echo "X='$X',  M='$M', R='$R', B='$B'"
