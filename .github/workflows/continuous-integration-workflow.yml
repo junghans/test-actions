@@ -23,7 +23,7 @@ jobs:
           echo "X='$X',  M='$M', R='$R', B='$B'"
       - name: Git magic
         run: |
-          echo "${{ secret.SSH_DEPLOY_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_DEPLOY_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           git remote -v
           git push --dry-run
