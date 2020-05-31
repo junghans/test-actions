@@ -1,0 +1,12 @@
+name: 'CMake'
+description: 'Run CMake'
+inputs:
+  distro:
+    description: 'Distro to run on'
+    required: true
+    default: 'latest'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - --build-arg DISTRO=${{ inputs.distro }}
