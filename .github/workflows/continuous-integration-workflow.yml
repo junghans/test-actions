@@ -9,6 +9,7 @@ jobs:
         include:
           - x: '11'
             m: 0
+            R: true
     runs-on: ubuntu-latest
     env:
       X: ${{ matrix.x }}
