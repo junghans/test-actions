@@ -9,6 +9,7 @@ on:
 jobs:
   CI:
     runs-on: ubuntu-latest
+    container: votca/buildenv:${{ matrix.distro }}
     steps:
       - uses: actions/checkout@master
       - uses: ./.github/actions/cmake
