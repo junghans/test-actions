@@ -21,7 +21,7 @@ jobs:
         run: |
           gcc -c main.c
           echo "X='$X',  M='$M', R='$R', B='$B'"
-      - name: 'Build Again'
+      - name: Build Again
         run: |
           gcc -c main.c
           echo "X='$X',  M='$M', R='$R', B='$B'"
