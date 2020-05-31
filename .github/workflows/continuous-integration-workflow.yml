@@ -14,7 +14,7 @@ jobs:
     env:
       X: ${{ matrix.x }}
       M: ${{ matrix.m }}
-      B: ${{ boolean(matrix.R) }}
+      B: ${{ matrix.R == 'true' }}
     steps:
       - uses: actions/checkout@master
       - name: Build
