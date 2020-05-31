@@ -8,7 +8,7 @@ jobs:
       - uses: actions/checkout@master
       - name: Git magic
         run: |
-          ssh git@github.com
+          mkdir ~/.ssh
           echo "${{ secrets.SSH_DEPLOY_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh git@github.com
