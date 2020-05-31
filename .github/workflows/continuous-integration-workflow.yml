@@ -7,16 +7,18 @@ jobs:
       matrix:
         x: ['1', '2', '3']
         include:
-          - x: ['11']
+          - x: '11'
             m: 0
     runs-on: ubuntu-latest
     env:
       X: ${{ matrix.x }}
       M: ${{ matrix.m }}
       R: ${{ ! startsWith(matrix.x,'1') }}
+      ccache-hash: ${{ matrix.x }}-${{ matrix.m }}
     steps:
       - uses: actions/checkout@master
       - name: Build
         run: |
           gcc -c main.c
           echo "X='$X',  M='$M', R='$R'"
+          echo "${{ env.ccache-hash }}"
