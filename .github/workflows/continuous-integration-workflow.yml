@@ -11,8 +11,8 @@ jobs:
           mkdir ~/.ssh
           echo "${{ secrets.SSH_DEPLOY_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          git config --global user.email "you@example.com"
-          git config --global user.name "Bot"
+          git config --global user.email "junghans@votca.org"
+          git config --global user.name "Christoph Junghans"
           date > file
           git add file
           git commit -m "update file"
