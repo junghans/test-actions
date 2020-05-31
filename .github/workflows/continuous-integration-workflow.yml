@@ -11,19 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - name: Git magic
+      - name: Build
         run: |
-          mkdir ~/.ssh
-          echo "${{ secrets.SSH_DEPLOY_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          git config --global user.email "junghans@votca.org"
-          git config --global user.name "Christoph Junghans"
-          git show
-          date > file
-  Deploy:
-    runs-on: ubuntu-latest
-    needs: CI
-    steps:
-      - name: Meh
-        run: |
-          ls
+          cmake -B builddir
+          cmake --build builddir
