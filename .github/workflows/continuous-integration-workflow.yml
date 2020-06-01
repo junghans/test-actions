@@ -12,6 +12,8 @@ jobs:
     container: votca/buildenv:latest
     steps:
       - uses: actions/checkout@master
+      - name: Setup
+        run: echo ":set-env name=CXX::clang++"
       - uses: ./.github/actions/cmake
       - name: Build
         run: |
