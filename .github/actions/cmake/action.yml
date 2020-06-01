@@ -5,6 +5,9 @@ inputs:
     description: 'Distro to run on'
     required: true
     default: 'latest'
+outputs:
+  cmake_args:
+    description: 'CMake args to use'
 runs:
   using: 'docker'
   image: 'Dockerfile'
