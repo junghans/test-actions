@@ -13,9 +13,10 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Setup
-        run: echo ":set-env name=CXX::clang++"
+        run: echo "::set-env name=CXX::clang++"
       - uses: ./.github/actions/cmake
       - name: Build
         run: |
+          echo "CXX=$CXX"
           ls
 
