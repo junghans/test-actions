@@ -14,12 +14,13 @@ jobs:
       - uses: actions/checkout@master
       - name: Setup
         run: echo "::set-env name=CXX::clang++"
-      - uses: ./.github/actions/cmake
+      - name: Run cmake actions
         id: cmake
+        uses: ./.github/actions/cmake
       - name: Build
         run: |
           echo "CXX=$CXX"
-          echo "${{ steps.cmake.outputs.cmake_args }}"
+          echo "cmake_args=${{ steps.cmake.outputs.cmake_args }}"
           cmake ${{ steps.cmake.outputs.cmake_args }} .
           make
           ls
