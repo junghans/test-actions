@@ -6,7 +6,7 @@ inputs:
     required: true
     default: 'latest'
 outputs:
-  cmake_args:
+  cmake-args:
     description: 'CMake args to use'
 runs:
   using: 'docker'
