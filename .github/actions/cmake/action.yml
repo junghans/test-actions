@@ -5,11 +5,16 @@ inputs:
     description: 'Distro to run on'
     required: true
     default: 'latest'
+  minimal:
+    description: 'If minimal'
+    required: false
 outputs:
   cmake_args:
     description: 'CMake args to use'
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'docker://votca/buildenv:latest'
+  entrypoint: 'entrypoint.sh'
   args:
     - DISTRO=${{ inputs.distro }}
+    - MINIMAL=${{ inputs.minimal }}
