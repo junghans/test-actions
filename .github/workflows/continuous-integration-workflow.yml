@@ -30,6 +30,6 @@ jobs:
           cmake ${{ steps.cmake.outputs.cmake_args }} .
           make
           ls
-     - name: Check
-       if: ${{ matrix.NO_T != true }}
-       run: echo hallo
+      - name: Check
+        if: ${{ matrix.NO_T != true }}
+        run: echo hallo
