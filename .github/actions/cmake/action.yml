@@ -9,11 +9,11 @@ inputs:
     description: 'If minimal'
     required: false
 outputs:
-  cmake_args:
+        cmake:args:
     description: 'CMake args to use'
 runs:
   using: 'docker'
-  image: 'docker://votca/buildenv:latest'
+  image: docker://votca/buildenv:${{ inputs.distro }}
   entrypoint: './.github/actions/cmake/entrypoint.sh'
   args:
     - DISTRO=${{ inputs.distro }}
