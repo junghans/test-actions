@@ -4,7 +4,7 @@ inputs:
   distro:
     description: 'Distro to run on'
     required: true
-    default: 'latest'
+    default: 'docker://votca/buildenv:latest'
   minimal:
     description: 'If minimal'
     required: false
@@ -13,7 +13,7 @@ outputs:
     description: 'CMake args to use'
 runs:
   using: 'docker'
-  image: 'docker://votca/buildenv:${{ inputs.distro }}'
+  image: '${{ inputs.distro }}'
   entrypoint: './.github/actions/cmake/entrypoint.sh'
   args:
     - DISTRO=${{ inputs.distro }}
