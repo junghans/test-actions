@@ -31,5 +31,4 @@ jobs:
           make
           ls
       - name: Check
-        if: ${{ matrix.NO_T != true }}
-        run: echo hallo
+        run: echo ${{ matrix.NO_T != true }}
