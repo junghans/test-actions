@@ -8,6 +8,12 @@ on:
 
 jobs:
   CI:
+    strategy:
+      matrix:
+        R: [ '1', '2']
+        include:
+          - R: '3'
+            NO_T: true
     runs-on: ubuntu-latest
     container: votca/buildenv:latest
     steps:
@@ -24,3 +30,6 @@ jobs:
           cmake ${{ steps.cmake.outputs.cmake_args }} .
           make
           ls
+     - name: Check
+       if: ${{ matrix.NO_T != true }}
+       run: echo hallo
