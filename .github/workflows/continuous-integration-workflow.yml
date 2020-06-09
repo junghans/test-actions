@@ -16,7 +16,7 @@ jobs:
         run: echo "::set-env name=CXX::clang++"
       - name: Run cmake actions
         id: cmake
-        uses: junghans/test-action@master
+        uses: junghans/test-action/cmake@master
       - name: Build
         run: |
           echo "CXX=$CXX"
