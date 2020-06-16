@@ -13,6 +13,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       - run: |
           date > file
+          git config --global user.email "you@example.com"
+          git config --global user.name "Your Name"
           git add file
-          git commit --author "Bot <abc@abc.org>" -m "Commit"
+          git commit -m "Commit"
           git push 
