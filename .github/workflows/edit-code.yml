@@ -11,6 +11,7 @@ jobs:
       - uses: actions/checkout@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          ref: pull/${{ github.event.issue.number }}/head 
       - run: |
           export
           date > file
