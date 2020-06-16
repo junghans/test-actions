@@ -12,6 +12,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
       - run: |
+          export
           date > file
           git config --global user.email "you@example.com"
           git config --global user.name "Your Name"
