@@ -23,7 +23,7 @@ jobs:
       - name: Print data
         run: "echo latest release: ${{ toJSON(steps.pr_info.outputs.data) }}"
       - name: Print prop
-        run: "echo latest release: ${{ fromJSON(steps.pr_info.outputs.data.url) }}"
+        run: "echo latest release: ${{ fromJSON(steps.pr_info.outputs.data).url }}"
       - name: Build
         run: |
           cmake .
