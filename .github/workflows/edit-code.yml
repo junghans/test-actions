@@ -6,7 +6,7 @@ jobs:
   edit:
     name: Edit
     runs-on: ubuntu-latest
-    if: startsWith(github.event.comment.body, 'Edit this please')
+    if: ${{ github.event.comment.body == 'Edit this please' }}
     steps:
       - uses: actions/checkout@master
       - uses: octokit/request-action@v2.x
