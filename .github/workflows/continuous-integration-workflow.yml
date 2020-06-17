@@ -17,6 +17,9 @@ jobs:
           route: GET /repos/:repository/pulls/:pull_number
           repository: ${{ github.repository }}
           pull_number: 3
+          mediaType: | # The | is significant!
+            previews:
+              - antiope
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Print data
