@@ -11,7 +11,10 @@ jobs:
       - uses: actions/checkout@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          ref: pull/${{ github.event.issue.number }}/head 
+          #      - name: Checkout PR
+          #        run: |
+          #          git fetch origin +refs/pull/${{ github.event.issue.number }}/merge
+          #          git checkout FE
       - run: |
           export
           date > file
