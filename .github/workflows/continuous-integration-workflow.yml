@@ -9,7 +9,6 @@ on:
 jobs:
   CI:
     runs-on: ubuntu-latest
-    container: votca/buildenv:latest
     steps:
       - uses: actions/checkout@master
       - uses: octokit/request-action@v2.x
@@ -25,7 +24,7 @@ jobs:
       - name: Print prop
         run: "echo full_name: ${{ fromJSON(steps.pr_info.outputs.data).url }}"
       - name: Print prop2
-        run: "echo base: ${{ fromJSON(steps.pr_info.outputs.data.repo).full_name }}"
+        run: "echo base: ${{ fromJSON(steps.pr_info.outputs.data).base.ref }}"
       - name: Build
         run: |
           cmake .
