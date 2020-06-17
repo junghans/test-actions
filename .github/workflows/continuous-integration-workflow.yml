@@ -25,7 +25,7 @@ jobs:
       - name: Print prop
         run: "echo full_name: ${{ fromJSON(steps.pr_info.outputs.data).url }}"
       - name: Print prop2
-        run: "echo base: ${{ fromJSON(steps.pr_info.outputs.data.repo)full_name }}"
+        run: "echo base: ${{ fromJSON(steps.pr_info.outputs.data.repo).full_name }}"
       - name: Build
         run: |
           cmake .
