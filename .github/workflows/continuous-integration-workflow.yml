@@ -23,9 +23,9 @@ jobs:
       - name: Print data
         run: "echo latest release: ${{ toJSON(steps.pr_info.outputs.data) }}"
       - name: Print prop
-        run: "echo latest release: ${{ fromJSON(steps.pr_info.outputs.data).repo.full_name }}"
+        run: "echo full_name: ${{ fromJSON(steps.pr_info.outputs.data).repo.full_name }}"
       - name: Print prop2
-        run: "echo latest release: ${{ fromJSON(steps.pr_info.outputs.data).base.ref }}"
+        run: "echo base: ${{ fromJSON(steps.pr_info.outputs.data).repo }}"
       - name: Build
         run: |
           cmake .
