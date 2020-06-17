@@ -20,8 +20,10 @@ jobs:
           pull_number: 3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: "echo latest release: ${{ toJSON(steps.get_latest_release.outputs.data) }}"
-      - run: "echo latest release: ${{ steps.get_latest_release.outputs.repo.full_name }}"
+      - name: Print data
+        run: "echo latest release: ${{ toJSON(steps.get_latest_release.outputs.data) }}"
+      - name: Print prop
+        run: "echo latest release: ${{ steps.get_latest_release.outputs.url }}"
       - name: Build
         run: |
           cmake .
