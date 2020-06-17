@@ -18,11 +18,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Print data
-        run: "echo latest release: ${{ toJSON(steps.issue_info.outputs.data).pull_request }}"
+        run: "echo latest release: ${{ toJSON(steps.issue_info.outputs.data).pull_request != '' }}"
       - name: Print data
-        run: "echo latest release: ${{ toJSON(steps.issue_info.outputs.data).pull_request.url }}"
+        run: "echo latest release: ${{ toJSON(steps.issue_info.outputs.data).pull_request.url != '' }}"
       - uses: octokit/request-action@v2.x
-        if: ${{ fromJSON(steps.issue_info.outputs.data).pull_request }} 
+        if: ${{ fromJSON(steps.issue_info.outputs.data).pull_request != '' }} 
         id: pr_info
         with:
           route: GET /repos/:repository/pulls/:pull_number
