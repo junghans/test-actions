@@ -12,14 +12,20 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - uses: octokit/request-action@v2.x
+        id: issue_info
+        with:
+          route: GET GET /repos/:owner/:repo/issues/:pull_number
+          repository: ${{ github.repository }}
+          pull_number: 3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: octokit/request-action@v2.x
+        if: ${{ fromJSON(steps.issue_info.data).pull_request }} 
         id: pr_info
         with:
           route: GET /repos/:repository/pulls/:pull_number
           repository: ${{ github.repository }}
           pull_number: 3
-          mediaType: | # The | is significant!
-            previews:
-              - antiope
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Print data
