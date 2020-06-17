@@ -24,6 +24,7 @@ jobs:
           git config --global user.email "you@example.com"
           git config --global user.name "Your Name"
           git fetch origin pull/${{ github.event.issue.number }}/head
+          git checkout FETCH_HEAD
           date > file
           git add file
           git commit -m "Commit"
