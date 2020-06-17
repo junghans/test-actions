@@ -19,6 +19,8 @@ jobs:
           pull_number: 3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Print data
+        run: "echo latest release: ${{ toJSON(steps.issue_info.outputs.data) }}"
       - uses: octokit/request-action@v2.x
         if: ${{ fromJSON(steps.issue_info.output.data).pull_request }} 
         id: pr_info
