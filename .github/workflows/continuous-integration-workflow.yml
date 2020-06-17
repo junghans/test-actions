@@ -20,7 +20,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: octokit/request-action@v2.x
-        if: ${{ fromJSON(steps.issue_info.data).pull_request }} 
+        if: ${{ fromJSON(steps.issue_info.output.data).pull_request }} 
         id: pr_info
         with:
           route: GET /repos/:repository/pulls/:pull_number
