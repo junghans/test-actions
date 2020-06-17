@@ -9,17 +9,22 @@ jobs:
     if: startsWith(github.event.comment.body, 'Edit this please')
     steps:
       - uses: actions/checkout@master
+      - uses: octokit/request-action@v2.x
+        id: pr_info
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          #      - name: Checkout PR
-          #        run: |
-          #          git fetch origin +refs/pull/${{ github.event.issue.number }}/merge
-          #          git checkout FE
-      - run: |
-          export
-          date > file
+          route: GET /repos/:repository/pulls/:pull_number
+          repository: ${{ github.repository }}
+          pull_number: ${{ github.event.issue.number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
           git config --global user.email "you@example.com"
           git config --global user.name "Your Name"
+          git fetch origin pull/${{ github.event.issue.number }}/head
+          date > file
           git add file
           git commit -m "Commit"
-          git push 
+          git push https://${GITHUB_TOKEN}@github.com/${{ fromJSON(steps.pr_info.outputs.data).head.repo.full_name }} HEAD:${{ fromJSON(steps.pr_info.outputs.data).head.ref }}
