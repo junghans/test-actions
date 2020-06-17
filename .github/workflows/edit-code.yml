@@ -12,7 +12,7 @@ jobs:
       - uses: octokit/request-action@v2.x
         id: issue_info
         with:
-          route: GET GET /repos/:repository/issues/:pull_number
+          route: GET /repos/:repository/issues/:pull_number
           repository: ${{ github.repository }}
           pull_number: 3
         env:
