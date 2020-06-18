@@ -28,7 +28,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@master
-        if: ${{ fromJSON(steps.issue_info.data).pull_request }}
+        if: ${{ fromJSON(steps.issue_info.outputs.data).pull_request }}
         with:
           repository: ${{ fromJSON(steps.pr_info.outputs.data).head.repo.full_name }}
           ref: ${{ fromJSON(steps.pr_info.outputs.data).head.ref }}
