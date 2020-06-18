@@ -8,8 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.comment.body == 'Edit this please' }}
     steps:
-      - uses: actions/checkout@master
-      - uses: octokit/request-action@v2.x
+      - Name: Check if message comes from PR
+        uses: octokit/request-action@v2.x
         id: issue_info
         with:
           route: GET /repos/:repository/issues/:pull_number
@@ -17,10 +17,7 @@ jobs:
           pull_number: ${{ github.event.issue.number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Print data
-        run: "echo latest release: ${{ fromJSON(steps.issue_info.outputs.data).pull_request }}"
-      - name: Print data
-        run: "echo latest release: ${{ fromJSON(steps.issue_info.outputs.data).pull_request.url }}"
+      - name: Get PR info
       - uses: octokit/request-action@v2.x
         if: ${{ fromJSON(steps.issue_info.outputs.data).pull_request }} 
         id: pr_info
@@ -30,16 +27,18 @@ jobs:
           pull_number: ${{ github.event.issue.number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@master
+        if: ${{ fromJSON(steps.issue_info.data).pull_request }}
+        with:
+          repository: ${{ fromJSON(steps.pr_info.outputs.data).head.repo.full_name
+          ref: ${{ fromJSON(steps.pr_info.outputs.data).head.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: push
         if: ${{ fromJSON(steps.issue_info.outputs.data).pull_request }} 
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.email "you@example.com"
           git config --global user.name "Your Name"
-          git fetch origin pull/${{ github.event.issue.number }}/head
-          git checkout FETCH_HEAD
           date > file
           git add file
           git commit -m "Commit"
-          git push https://${GITHUB_TOKEN}@github.com/${{ fromJSON(steps.pr_info.outputs.data).head.repo.full_name }} HEAD:${{ fromJSON(steps.pr_info.outputs.data).head.ref }}
+          git push 

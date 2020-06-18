@@ -34,7 +34,7 @@ jobs:
         run: "echo latest release: ${{ toJSON(steps.pr_info.outputs.data) }}"
       - name: Print prop
         run: "echo full_name: ${{ fromJSON(steps.pr_info.outputs.data).head.repo.full_name }}"
-      - name: Print prop2
+      - name: Prnt prop2
         run: "echo from: ${{ fromJSON(steps.pr_info.outputs.data).head.ref }}"
       - name: Build
         run: |
