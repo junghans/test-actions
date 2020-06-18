@@ -1,12 +1,13 @@
-name: Edit code
+name: Format
 on:
   issue_comment:
     types: [created]
 jobs:
   edit:
-    name: Edit
+    name: clang-format
+    if: ${{ github.event.comment.body == '@votca-bot format' }}
     runs-on: ubuntu-latest
-    if: ${{ github.event.comment.body == 'Edit this please' }}
+    container: votca/buildenv:${{ matrix.distro }}
     steps:
       - name: Check if message comes from PR
         uses: octokit/request-action@v2.x
@@ -17,25 +18,26 @@ jobs:
           pull_number: ${{ github.event.issue.number }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Get PR info
-        uses: octokit/request-action@v2.x
         if: ${{ fromJSON(steps.issue_info.outputs.data).pull_request }}
+        uses: octokit/request-action@v2.x
         id: pr_info
         with:
           route: GET /repos/:repository/pulls/:pull_number
           repository: ${{ github.repository }}
           pull_number: ${{ github.event.issue.number }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/checkout@master
+      - name: Checkout head branch from PR
         if: ${{ fromJSON(steps.issue_info.outputs.data).pull_request }}
+        uses: actions/checkout@master
         with:
           repository: ${{ fromJSON(steps.pr_info.outputs.data).head.repo.full_name }}
           ref: ${{ fromJSON(steps.pr_info.outputs.data).head.ref }}
-      - name: push
+      - name: Run clang-format
+        run: find . -type f -regex ".*\.\(cc\|h\)" -print0 | xargs -0 clang-format -i -style=file
+      - name: Commit and push
         if: ${{ fromJSON(steps.issue_info.outputs.data).pull_request }}
         run: |
-          git config --global user.email "you@example.com"
-          git config --global user.name "Your Name"
-          date > file
-          git add file
-          git commit -m "Commit"
+          git config --global user.name "Votca Bot"
+          git config --global user.email "github@votca.org"
+          git commit -m "Format code using clang-format"
           git push
