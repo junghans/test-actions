@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.comment.body == 'Edit this please' }}
     steps:
-      - Name: Check if message comes from PR
+      - name: Check if message comes from PR
         uses: octokit/request-action@v2.x
         id: issue_info
         with:
@@ -18,8 +18,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Get PR info
-      - uses: octokit/request-action@v2.x
-        if: ${{ fromJSON(steps.issue_info.outputs.data).pull_request }} 
+        uses: octokit/request-action@v2.x
+        if: ${{ fromJSON(steps.issue_info.outputs.data).pull_request }}
         id: pr_info
         with:
           route: GET /repos/:repository/pulls/:pull_number
@@ -34,11 +34,11 @@ jobs:
           ref: ${{ fromJSON(steps.pr_info.outputs.data).head.ref }}
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: push
-        if: ${{ fromJSON(steps.issue_info.outputs.data).pull_request }} 
+        if: ${{ fromJSON(steps.issue_info.outputs.data).pull_request }}
         run: |
           git config --global user.email "you@example.com"
           git config --global user.name "Your Name"
           date > file
           git add file
           git commit -m "Commit"
-          git push 
+          git push
