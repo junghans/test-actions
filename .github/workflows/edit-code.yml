@@ -15,6 +15,7 @@ jobs:
           route: GET /repos/:repository/issues/:pull_number
           repository: ${{ github.repository }}
           pull_number: ${{ github.event.issue.number }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Get PR info
         uses: octokit/request-action@v2.x
         if: ${{ fromJSON(steps.issue_info.outputs.data).pull_request }}
@@ -23,6 +24,7 @@ jobs:
           route: GET /repos/:repository/pulls/:pull_number
           repository: ${{ github.repository }}
           pull_number: ${{ github.event.issue.number }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@master
         if: ${{ fromJSON(steps.issue_info.outputs.data).pull_request }}
         with:
