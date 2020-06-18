@@ -40,5 +40,5 @@ jobs:
           git config --global user.name "Votca Bot"
           git config --global user.email "github@votca.org"
           git add -u
-          git commit -m "Format code using clang-format"
+          git commit -m "Format code using clang-format" || true
           git push
