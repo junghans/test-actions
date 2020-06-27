@@ -8,6 +8,10 @@ jobs:
     if: ${{ github.event.ref == 'update_master_submodules' }}
     runs-on: ubuntu-latest
     steps:
+      - name: Determine base branch
+        id: base
+        run:
+          echo "::set-output name=branch::$(echo ${{ github.event.ref }} | sed 's/update_\(.*\)_submodules/\1/')"
       - name: Checkout code
         uses: actions/checkout@master
         with:
@@ -17,7 +21,7 @@ jobs:
         run: |
           git config --global user.email "you@example.com"
           git config --global user.name "Your Name"
-          git merge origin/master || true
+          git merge origin/${{ steps.base.outputs.branch }} || true
           git push || true
       - name: Create Pull Request
         uses: actions/github-script@0.3.0
@@ -27,7 +31,7 @@ jobs:
             github.pulls.create({
               owner: 'junghans',
               repo: 'test-actions',
-              title: 'Update master submodules',
+              title: 'Update ${{ steps.base.outputs.branch }} submodules',
               head: '${{ github.event.ref }}',
-              base: 'master'
+              base: 'steps.base.outputs.branch }}'
             })
