@@ -33,5 +33,5 @@ jobs:
               repo: 'test-actions',
               title: 'Update ${{ steps.base.outputs.branch }} submodules',
               head: '${{ github.event.ref }}',
-              base: 'steps.base.outputs.branch }}'
+              base: '${{ steps.base.outputs.branch }}'
             })
