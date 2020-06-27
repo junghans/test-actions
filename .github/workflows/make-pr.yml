@@ -7,6 +7,15 @@ jobs:
     if: ${{ github.event.ref == 'update_master_submodules' }}
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        user: actions/checkout@master
+        with:
+          ref: ${{ github.event.ref }}
+          depth: 0
+      - name: Try to merge master
+        run: |
+          git merge origin/master || true
+          git push || true
       - name: Create Pull Request
         uses: actions/github-script@0.3.0
         with:
@@ -15,7 +24,7 @@ jobs:
             github.pulls.create({
               owner: 'junghans',
               repo: 'test-actions',
-              title: 'Update all submodules',
+              title: 'Update master submodules',
               head: '${{ github.event.ref }}',
               base: 'master'
             })
