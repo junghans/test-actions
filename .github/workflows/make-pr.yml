@@ -1,0 +1,21 @@
+on:
+  create
+
+jobs:
+  PR:
+    name: Create
+    if: ${{ github.event.ref == 'update_master_submodules' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Pull Request
+        uses: actions/github-script@0.3.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.pulls.create({
+              owner: 'junghans',
+              repo: 'test-actions',
+              title: 'Update all submodules',
+              head: '${{ github.event.ref }}',
+              base: 'master'
+            })
