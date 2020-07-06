@@ -8,35 +8,14 @@ on:
 
 jobs:
   CI:
-    runs-on: ubuntu-latest
     steps:
+      matrix:
+        distro: [latest, fedora_rawhide, opensuse, ubuntu, ubuntu_devel, ubuntu_rolling, ubuntu_18.04, intel]
+        cc: [gcc, clang]
+        coverage: [false]
+    runs-on: ubuntu-latest
       - uses: actions/checkout@master
-      - uses: octokit/request-action@v2.x
-        id: issue_info
-        with:
-          route: GET /repos/:repository/issues/:pull_number
-          repository: ${{ github.repository }}
-          pull_number: 3
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Print data
-        run: "echo latest release: ${{ toJSON(steps.issue_info.outputs.data) }}"
-      - uses: octokit/request-action@v2.x
-        if: ${{ fromJSON(steps.issue_info.outputs.data).pull_request }} 
-        id: pr_info
-        with:
-          route: GET /repos/:repository/pulls/:pull_number
-          repository: ${{ github.repository }}
-          pull_number: 3
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Print data
-        run: "echo latest release: ${{ toJSON(steps.pr_info.outputs.data) }}"
-      - name: Print prop
-        run: "echo full_name: ${{ fromJSON(steps.pr_info.outputs.data).head.repo.full_name }}"
-      - name: Prnt prop2
-        run: "echo from: ${{ fromJSON(steps.pr_info.outputs.data).head.ref }}"
       - name: Build
         run: |
-          cmake .
+          cmake -DCMAKE_C_COMPILER=${{ matrix.cc }} .
           make
