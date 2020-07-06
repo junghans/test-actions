@@ -10,9 +10,11 @@ jobs:
   CI:
     strategy:
       matrix:
-        distro: [latest, fedora_rawhide, opensuse, ubuntu, ubuntu_devel, ubuntu_rolling, ubuntu_18.04, intel]
         cc: [gcc, clang]
         coverage: [false]
+        include:
+          cc: gcc
+          coverage: true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
