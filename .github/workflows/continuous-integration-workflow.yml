@@ -8,7 +8,7 @@ on:
 
 jobs:
   CI:
-    if: ${{ github.ref != 'refs/heads/master' || matrix.coverage }} 
+    if: ${{ github.ref != 'refs/heads/master' || matrix.coverage == true }} 
     strategy:
       matrix:
         cc: [gcc, clang]
