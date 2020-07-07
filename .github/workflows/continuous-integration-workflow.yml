@@ -10,32 +10,24 @@ jobs:
   CI:
     strategy:
       matrix:
-        cc: [gcc, clang]
-        coverage: [false]
-        include:
-          - cc: gcc
-            coverage: true
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - name: Build
-        run: |
-          sleep 30
-          cmake -DCMAKE_C_COMPILER=${{ matrix.cc }} .
-          make
-  Coverage:
-    strategy:
-      matrix:
-        cc: [gcc, clang]
-        coverage: [false]
-        include:
-          - cc: gcc
-            coverage: true
+        cc: [gcc, clang, cc1, cc2, cc3, cc4, cc5, cc6, cc7, cc8, cc9, cc10, cc11, cc12, cc13, cc14, cc15]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
       - name: Build
         run: |
           false
-          cmake -DCMAKE_C_COMPILER=${{ matrix.cc }} .
+          sleep 30
+          cmake . 
+          make
+  Coverage:
+    strategy:
+      matrix:
+        cc: [gcc, clang, cc1, cc2, cc3, cc4, cc5, cc6, cc7, cc8, cc9, cc10, cc11, cc12, cc13, cc14, cc15]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Build
+        run: |
+          cmake .
           make
