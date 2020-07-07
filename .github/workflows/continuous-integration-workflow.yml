@@ -15,12 +15,30 @@ jobs:
         include:
           - cc: gcc
             coverage: true
-    if: ${{ matrix.coverage }} 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
       - name: Build
         working-directory: build
         run: |
+          sleep 30
+          cmake -DCMAKE_C_COMPILER=${{ matrix.cc }} ..
+          make
+jobs:
+  Coverage:
+    strategy:
+      matrix:
+        cc: [gcc, clang]
+        coverage: [false]
+        include:
+          - cc: gcc
+            coverage: true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Build
+        working-directory: build
+        run: |
+          false
           cmake -DCMAKE_C_COMPILER=${{ matrix.cc }} ..
           make
