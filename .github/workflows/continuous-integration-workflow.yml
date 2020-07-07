@@ -8,7 +8,6 @@ on:
 
 jobs:
   CI:
-    if: ${{ matrix.coverage }} 
     strategy:
       matrix:
         cc: [gcc, clang]
@@ -20,6 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Build
+        working-directory: build
         run: |
-          cmake -DCMAKE_C_COMPILER=${{ matrix.cc }} .
+          cmake -DCMAKE_C_COMPILER=${{ matrix.cc }} ..
           make
