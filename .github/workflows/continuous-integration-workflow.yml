@@ -22,7 +22,11 @@ jobs:
           fetch-depth: 0
           submodules: true
           path: votca
+      - name: Setup git
+        run: |
+          git config --global user.name "Votca Bot"
+          git config --global user.email "github@votca.org"
+        working-directory: votca
       - name: Make Release
         run: |
-          ls
           .github/workflows/make_release.sh 1.6.2 .
