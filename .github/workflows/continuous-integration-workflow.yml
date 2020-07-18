@@ -11,9 +11,15 @@ on:
 jobs:
   CI:
     runs-on: ubuntu-latest
+    container: votca/buildenv:lastest
     steps:
-      - uses: actions/checkout@master
-      - name: Build
+      - name: Checkout code    
+        uses: actions/checkout@v2.2.0
+        with:
+          repository: votca/votca
+          fetch-depth: 0
+          submodules: true
+          path: votca
+      - name: Make Release
         run: |
-          cmake . 
-          make
+          .github/workflow/make_release.sh 1.2.2 builddir
