@@ -24,4 +24,5 @@ jobs:
           path: votca
       - name: Make Release
         run: |
-          .github/workflows/make_release.sh 1.2.2 builddir
+          ls
+          .github/workflows/make_release.sh 1.2.2 .
