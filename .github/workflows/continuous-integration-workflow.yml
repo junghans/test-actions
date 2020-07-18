@@ -25,4 +25,4 @@ jobs:
       - name: Make Release
         run: |
           ls
-          .github/workflows/make_release.sh 1.2.2 .
+          .github/workflows/make_release.sh 1.6.2 .
