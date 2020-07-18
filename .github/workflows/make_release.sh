@@ -4,13 +4,12 @@
 #- allow $what to be more flexible
 
 
-burl="https://github.com/votca/votca.git"
+url="https://github.com/votca/votca.git"
 branch=stable
 testing=no
 clean=no
 what="tools csg csg-manual csgapps csg-tutorials xtp xtp-tutorials"
 cmake_opts=()
-usage="Usage: ${0##*/} [OPTIONS] rel_version builddir"
 
 die () {
   echo -e "$*"
@@ -34,16 +33,15 @@ export -f is_part
 show_help() {
   cat << eof
 This is the script to make release tarballs for VOTCA
-$usage
+Usage: ${0##*/} [OPTIONS] rel_version path/to/votca/checkout"
 OPTIONS:
     --help          Show this help
     --test BRANCH   Build test release from branch BRANCH (use with current rel ver)
-    --clean         Clean tmp dirs  (SUPER DANGEROUS)
-    --repos REL     Use repos instead of '$what'
+    --repos REPOS   Use repos instead of '$what'
 -D*                 Extra option to give to cmake 
 
-Examples:  ${0##*/} -q
-           ${0##*/} --test stable 1.2.3 builddir
+Examples:  ${0##*/} --help
+           ${0##*/} --test stable 1.2.3 srcdir
 
 Report bugs and comments at https://github.com/votca/admin/issues
 eof
@@ -61,9 +59,6 @@ while [[ $# -gt 0 ]]; do
     fi
  fi
  case $1 in
-   --clean)
-     clean=yes
-     shift;;
    --repos)
      what="$2"
      shift 2;;
@@ -92,61 +87,48 @@ for i in tools csg csg-tutorials; do
   fi
 done
 
-[[ -z $2 ]] && die "${0##*/}: missing argument - no builddir!\nTry ${0##*/} --help"
+[[ -z $2 ]] && die "${0##*/}: missing argument - no srcdir!\nTry ${0##*/} --help"
 
-[[ -d $2 ]] || mkdir -p "$2"
-cd "$2"
-builddir="${PWD}"
+shopt -s extglob
+set -e
 
-if [[ -d votca ]]; then
-  git -C votca remote update --prune
-  git -C votca checkout $branch
-  git -C votca pull --ff-only "$burl" $branch
-  git -C votca submodule update --init
-  [[ -z "$(git -C votca ls-files -mo --exclude-standard)" ]] || die "There are modified or unknown files in votca"
-else
-  git clone --recursive $burl votca
-  git -C votca checkout $branch
-  git -C votca remote set-url --push origin "git@github.com:votca/votca.git"
-fi
+topdir="${PWD}"
 
 rel="$1"
-shopt -s extglob
 [[ $testing = "no" && ${rel} != [1-9].[0-9]?(.[1-9]|_rc[1-9]) ]] && die "release has the wrong form"
+srcdir="$2"
+[[ -d $srcdir ]] || git clone --recursive "$url" "$srcdir"
+pushd ${srcdir}
+srcdir="${PWD}"
+[[ -f tools/CMakeLists.txt ]] || die "Checkout in $srcdir has no tools/CMakeLists.txt"
+popd
 
-set -e
-instdir="instdir"
-build="build"
-if [[ -d $instdir ]]; then
-  [[ $clean = yes ]] || die "Test install dir '$instdir' is already there, run 'rm -rf $PWD/$instdir' or add --clean"
-  rm -vrf $PWD/$instdir
-fi
-if [[ -d $build ]]; then
-  [[ $clean = yes ]] || die "$build is already there, run 'rm -rf $PWD/$build' or add --clean"
-  rm -vrf $PWD/$build
-fi
+instdir="${topdir}/install"
+build="${topdir}/build"
 
 cleanup() {
   [[ $testing = "no" ]] || return
   echo "####### ERROR ABOVE #########"
-  cd ${builddir}
-  for p in votca $what; do
+  pushd ${srcdir}
+  for p in . $what; do
     echo $p
     git -C ${p} reset --hard origin/${branch} || true
-    git -C votca/${p} reset --hard origin/${branch} || true
     git -C ${p} tag --delete "v${rel}" || true
   done
+  popd
 }
 trap cleanup EXIT
 
-#order matters for deps
+pushd ${srcdir}
+git remote update --prune
+git checkout "$branch" || die "Could not checkout $branch"
+git pull --ff-only
 for p in $what; do
-  [[ -d ${p} ]] || git clone "git://github.com/votca/${p}.git"
-  git -C ${p} remote update --prune
-  git -C ${p} pull --ff-only
-  cd $p
+  pushd "${p}"
   [[ -z "$(git ls-files -mo --exclude-standard)" ]] || die "There are modified or unknown files in $p"
-  git checkout $branch || die "Could not checkout $branch"
+  git remote update --prune
+  git checkout "$branch" || die "Could not checkout $branch"
+  git pull --ff-only
   [[ -z "$(git ls-files -mo --exclude-standard)" ]] || die "There are modified or unknown files in $p"
   if [[ $testing = "yes" ]]; then
     :
@@ -161,47 +143,44 @@ for p in $what; do
   if [[ $testing = "no" ]]; then
     [[ -f CHANGELOG.md && -z $(grep "^## Version ${rel} " CHANGELOG.md) ]] && \
           die "Go and update CHANGELOG.md in ${p} before making a release"
-    git remote set-url --push origin "git@github.com:votca/${p}.git"
     #|| true because maybe version has not changed
     git commit -m "Version bumped to $rel" || true
     git tag "v${rel}"
   fi
-  git archive --prefix "votca-${p}-${rel}/" -o "../votca-${p}-${rel}.tar.gz" HEAD || die "git archive failed"
-  cd -
+  git archive --prefix "votca-${p}-${rel}/" -o "${topdir}/votca-${p}-${rel}.tar.gz" HEAD || die "git archive failed"
+  popd
 done
+popd
 
-rm -rf $instdir
+rm -rf $instdir $build
 mkdir $instdir
-[ -d $build ] && die "$build is already there, run 'rm -rf $PWD/$build'"
 mkdir $build
-cd $build
+pushd $build
 
 echo "Starting build check from tarball"
 
-cmake -DCMAKE_INSTALL_PREFIX=$PWD/../$instdir -DMODULE_BUILD=ON \
-      -DVOTCA_TARBALL_DIR=${PWD}/.. -DVOTCA_TARBALL_TAG="${rel}" \
+cmake -DCMAKE_INSTALL_PREFIX=$instdir -DMODULE_BUILD=ON \
+      -DVOTCA_TARBALL_DIR=${topdir} -DVOTCA_TARBALL_TAG="${rel}" \
       -DENABLE_TESTING=ON \
       -DENABLE_REGRESSION_TESTING=ON \
       $(is_part csg-manual ${what} && echo -DBUILD_CSG_MANUAL=ON) \
       $(is_part csgapps ${what} && echo -DBUILD_CSGAPPS=ON) \
       $(is_part xtp ${what} && echo -DBUILD_XTP=ON) \
-      ${cmake_opts[@]} ../votca
+      ${cmake_opts[@]} "${srcdir}"
 make -j${j}
 for p in csg-manual; do
   is_part $p ${what} || continue;
-  cp $PWD/../$instdir/share/doc/votca-$p/*manual.pdf ../votca-${p%-manual}-manual-${rel}.pdf
+  cp $instdir/share/doc/votca-$p/*manual.pdf ${topdir}/votca-${p%-manual}-manual-${rel}.pdf
 done
-cd -
+popd
+
 rm -rf $build
 rm -rf $instdir
+
+pushd "$srcdir"
 if [[ $testing = "no" ]]; then
   sed -i "/set(PROJECT_VERSION/s/\"[^\"]*\"/\"$rel\"/" votca/CMakeLists.txt || die "sed of CMakeLists.txt failed"
   sed -i "/stable/s/or 'stable' or '[^']*'/or 'stable' or 'v$rel'/" votca/README.md || die "sed of README.md failed"
-  git -C votca submodule update --init
-  git -C votca submodule foreach git checkout ${branch}
-  for p in $what; do
-     git -C votca/$p pull $PWD/$p stable
-  done
   git -C votca add -u
   git -C votca commit -m "Version bumped to $rel"
   git -C votca tag "v${rel}"
@@ -210,11 +189,11 @@ trap - EXIT
 
 if [[ $testing = "no" ]]; then
   echo "####### TODO by you #########"
-  echo cd $PWD
-  echo "for p in votca $what; do git -C \$p log -p --submodule origin/${branch}..${branch}; done"
-  echo "for p in votca $what; do git -C \$p  push --tags origin ${branch}:${branch}; done"
+  echo "cd $srcdir"
+  echo "for p in . $what; do git -C \$p log -p --submodule origin/${branch}..${branch}; done"
+  echo "for p in . $what; do git -C \$p  push --tags origin ${branch}:${branch}; done"
   echo "And do NOT forget to upload pdfs to github."
 else
-  echo cd $PWD
+  echo "cd $topdir"
   echo "Take a look at" *$rel*
 fi
