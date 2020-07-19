@@ -36,12 +36,13 @@ This is the script to make release tarballs for VOTCA
 Usage: ${0##*/} [OPTIONS] rel_version path/to/votca/checkout"
 OPTIONS:
     --help          Show this help
-    --test BRANCH   Build test release from branch BRANCH (use with current rel ver)
+    --test          Just test, do not commit stuff
+    --branch BRANCH Use BRANCH instead of '$branch'
     --repos REPOS   Use repos instead of '$what'
 -D*                 Extra option to give to cmake 
 
 Examples:  ${0##*/} --help
-           ${0##*/} --test stable 1.2.3 srcdir
+           ${0##*/} --test 1.2.3 srcdir
 
 Report bugs and comments at https://github.com/votca/admin/issues
 eof
@@ -62,10 +63,12 @@ while [[ $# -gt 0 ]]; do
    --repos)
      what="$2"
      shift 2;;
-   --test)
+   --branch)
      branch="$2"
-     testing=yes
      shift 2;;
+   --test)
+     testing=yes
+     shift 1;;
    -D)
     cmake_opts+=( -D"${2}" )
     shift 2;;
@@ -88,9 +91,9 @@ for i in tools csg csg-tutorials; do
 done
 
 [[ -z $2 ]] && die "${0##*/}: missing argument - no srcdir!\nTry ${0##*/} --help"
+[[ ${testing} = "no" && ${branch} != "stable" ]] && die "branch ${branch} cannot be use without testing"
 
 shopt -s extglob
-set -e
 
 topdir="${PWD}"
 
@@ -106,6 +109,7 @@ popd
 instdir="${topdir}/install"
 build="${topdir}/build"
 
+set -e
 cleanup() {
   [[ $testing = "no" ]] || return
   echo "####### ERROR ABOVE #########"
@@ -194,6 +198,8 @@ if [[ $testing = "no" ]]; then
   echo "for p in . $what; do git -C \$p  push --tags origin ${branch}:${branch}; done"
   echo "And do NOT forget to upload pdfs to github."
 else
-  echo "cd $topdir"
+  echo "cd $srcdir"
   echo "Take a look at" *$rel*
+  cd "$srcdir"
+  for p in . $what; do git -C $p log -p --submodule origin/${branch}..${branch}; done
 fi

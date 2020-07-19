@@ -7,12 +7,23 @@ on:
   pull_request:
     branches:
       - master
+  workflow_dispatch:
+    inputs:
+      testing:
+        description: 'Just test'     
+        required: true
+        default: false
 
 jobs:
   CI:
     runs-on: ubuntu-latest
     container: votca/buildenv:latest
     steps:
+      - uses: actions/cache@v2
+        with:
+          path: ~/.ccache
+          key: ccache-full  
+          restore-keys: ccache 
       - name: Checkout code    
         uses: actions/checkout@v2.2.0
       - name: Checkout votca   
@@ -29,4 +40,4 @@ jobs:
         working-directory: votca
       - name: Make Release
         run: |
-          .github/workflows/make_release.sh 1.6.2 .
+          .github/workflows/make_release.sh --branch stable -DENABLE_REGRESSION_TESTING=OFF -DENABLE_TESTING=OFF 1.6.2 .
