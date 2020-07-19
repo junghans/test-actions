@@ -100,7 +100,9 @@ for i in tools csg csg-tutorials; do
 done
 
 [[ -z $2 ]] && die "${0##*/}: missing argument - no srcdir!\nTry ${0##*/} --help"
-[[ ${testing} = "no" && ${branch} != "stable" ]] && die "branch ${branch} cannot be use without testing"
+if [[ ${CI} != "true" && ${testing} = "no" && ${branch} != "stable" ]]; then
+  die "branch ${branch} cannot be use without testing"
+fi
 
 shopt -s extglob
 
