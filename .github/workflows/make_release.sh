@@ -183,11 +183,11 @@ rm -rf $instdir
 
 pushd "$srcdir"
 if [[ $testing = "no" ]]; then
-  sed -i "/set(PROJECT_VERSION/s/\"[^\"]*\"/\"$rel\"/" votca/CMakeLists.txt || die "sed of CMakeLists.txt failed"
-  sed -i "/stable/s/or 'stable' or '[^']*'/or 'stable' or 'v$rel'/" votca/README.md || die "sed of README.md failed"
-  git -C votca add -u
-  git -C votca commit -m "Version bumped to $rel"
-  git -C votca tag "v${rel}"
+  sed -i "/set(PROJECT_VERSION/s/\"[^\"]*\"/\"$rel\"/" CMakeLists.txt || die "sed of CMakeLists.txt failed"
+  sed -i "/stable/s/or 'stable' or '[^']*'/or 'stable' or 'v$rel'/" README.md || die "sed of README.md failed"
+  git add -u
+  git commit -m "Version bumped to $rel"
+  git tag "v${rel}"
 fi
 trap - EXIT
 
@@ -198,8 +198,7 @@ if [[ $testing = "no" ]]; then
   echo "for p in . $what; do git -C \$p  push --tags origin ${branch}:${branch}; done"
   echo "And do NOT forget to upload pdfs to github."
 else
-  echo "cd $srcdir"
+  echo "cd $topdir"
   echo "Take a look at" *$rel*
-  cd "$srcdir"
-  for p in . $what; do git -C $p log -p --submodule origin/${branch}..${branch}; done
 fi
+for p in . $what; do git -C $p log -p --submodule origin/${branch}..${branch}; done
