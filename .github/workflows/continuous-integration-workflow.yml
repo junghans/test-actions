@@ -40,4 +40,4 @@ jobs:
         working-directory: votca
       - name: Make Release
         run: |
-          .github/workflows/make_release.sh --branch stable -DENABLE_REGRESSION_TESTING=OFF -DENABLE_TESTING=OFF 1.6.2 .
+          .github/workflows/make_release.sh --branch stable -DENABLE_REGRESSION_TESTING=OFF -DENABLE_TESTING=OFF 1.6.2 votca
