@@ -1,6 +1,5 @@
 name: Hello
 on:
-on:
   push:
     branches:
       - release_testing
