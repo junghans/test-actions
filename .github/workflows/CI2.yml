@@ -13,4 +13,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Echo hallo
-        run: echo hallo
+        run: echo hallo ${{ github.event.ref }}
