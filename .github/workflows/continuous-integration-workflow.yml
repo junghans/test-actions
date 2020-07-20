@@ -41,7 +41,7 @@ jobs:
         run: |
           .github/workflows/make_release.sh --branch stable -DENABLE_REGRESSION_TESTING=OFF -DENABLE_TESTING=OFF --verbose -j1 1.6.2 votca
       - name: Upload manual
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: csg-manual
           path: votca-csg-manual-*.pdf
