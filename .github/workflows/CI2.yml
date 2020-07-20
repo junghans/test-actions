@@ -1,5 +1,9 @@
 name: Hello
 on:
+on:
+  push:
+    branches:
+      - release_testing
   workflow_dispatch:
     inputs:
       deploy:
