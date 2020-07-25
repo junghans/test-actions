@@ -23,7 +23,7 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
           prerelease: ${{ contains(github.ref, 'rc') }}
-          body: ${{ steps.changelog.outputs.changelog }}  
+          body: ${{ env.CHANGELOG }}  
       - name: Get manual
         run: wget https://github.com/votca/csg-manual/releases/download/v1.6.1/votca-csg-manual-1.6.1.pdf
       - name: Upload manual

@@ -24,4 +24,4 @@ fi
 
 [[ $version_section ]] || die "Could not find section to $version"
 echo "$version_section"
-echo "::set-output name=changelog::$version_section"
+echo "::set-env name=CHANGELOG::$version_section"
