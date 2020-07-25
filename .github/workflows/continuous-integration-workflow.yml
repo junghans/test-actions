@@ -27,18 +27,7 @@ jobs:
           restore-keys: ccache 
       - name: Checkout code    
         uses: actions/checkout@v2.2.0
-      - name: Checkout votca   
-        uses: actions/checkout@v2.2.0
-        with:
-          repository: votca/votca
-          fetch-depth: 0
-          submodules: true
-          path: votca
-      - name: Setup git
+      - name: Build
         run: |
-          git config --global user.name "Votca Bot"
-          git config --global user.email "github@votca.org"
-        working-directory: votca
-      - name: Make Release
-        run: |
-          .github/workflows/make_release.sh --branch stable -DENABLE_REGRESSION_TESTING=OFF -DENABLE_TESTING=OFF 1.6.2 votca
+          cmake -B build
+          make -C build
