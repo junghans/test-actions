@@ -8,12 +8,6 @@ on:
   pull_request:
     branches:
       - master
-  workflow_dispatch:
-    inputs:
-      testing:
-        description: 'Just test'     
-        required: true
-        default: false
 
 jobs:
   CI:

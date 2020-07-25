@@ -8,6 +8,7 @@ url="https://github.com/votca/votca.git"
 branch=stable
 testing=no
 clean=no
+verbose=
 what="tools csg csg-manual csgapps csg-tutorials xtp xtp-tutorials"
 cmake_opts=()
 
@@ -39,6 +40,8 @@ OPTIONS:
     --test          Just test, do not commit stuff
     --branch BRANCH Use BRANCH instead of '$branch'
     --repos REPOS   Use repos instead of '$what'
+    -j  JOBS        Jobs to use instead of '$j'
+    --verbose       Do a verbose build
 -D*                 Extra option to give to cmake 
 
 Examples:  ${0##*/} --help
@@ -69,8 +72,14 @@ while [[ $# -gt 0 ]]; do
    --test)
      testing=yes
      shift 1;;
+   --verbose)
+     verbose=yes
+     shift 1;;
    -D)
     cmake_opts+=( -D"${2}" )
+    shift 2;;
+   -j)
+    j="$2"
     shift 2;;
    --help)
      show_help
@@ -91,7 +100,9 @@ for i in tools csg csg-tutorials; do
 done
 
 [[ -z $2 ]] && die "${0##*/}: missing argument - no srcdir!\nTry ${0##*/} --help"
-[[ ${testing} = "no" && ${branch} != "stable" ]] && die "branch ${branch} cannot be use without testing"
+if [[ ${CI} != "true" && ${testing} = "no" && ${branch} != "stable" ]]; then
+  die "branch ${branch} cannot be use without testing"
+fi
 
 shopt -s extglob
 
@@ -171,7 +182,7 @@ cmake -DCMAKE_INSTALL_PREFIX=$instdir -DMODULE_BUILD=ON \
       $(is_part csgapps ${what} && echo -DBUILD_CSGAPPS=ON) \
       $(is_part xtp ${what} && echo -DBUILD_XTP=ON) \
       ${cmake_opts[@]} "${srcdir}"
-make -j${j}
+make -j${j} ${verbose:+VERBOSE=1}
 for p in csg-manual; do
   is_part $p ${what} || continue;
   cp $instdir/share/doc/votca-$p/*manual.pdf ${topdir}/votca-${p%-manual}-manual-${rel}.pdf
