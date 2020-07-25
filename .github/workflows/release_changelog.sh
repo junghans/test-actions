@@ -11,10 +11,6 @@ die () {
 version="$(sed -n 's/set(PROJECT_VERSION *"\([^"]*\)").*/\1/p' CMakeLists.txt)"
 [[ ${version} ]] || die "No version found"
 
-# Grep module name from CMakeLists.txt and cut votca- suffix
-module=$(sed -n 's/project(\(votca-\)\?\([^ )]*\).*)/\2/p' CMakeLists.txt)
-[[ ${module} ]] || die "Could not fetch module"
-
 if [[ -f CHANGELOG.rst ]]; then
   CHANGELOG=CHANGELOG.rst
   version="${version//_/\\\\\\\\_}" # backslash underscores
@@ -28,4 +24,4 @@ fi
 
 [[ $version_section ]] || die "Could not find section to $version"
 echo "$version_section"
-#| sed -e "s@#\([0-9]\+\)@votca/${module}#\1@g"
+echo "::set-output name=changelog::$version_section"

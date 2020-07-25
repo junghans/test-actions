@@ -12,7 +12,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Create Changlog
-        run: .github/workflows/release_changelog.sh > release.md
+        id: changelog
+        run: .github/workflows/release_changelog.sh
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -22,7 +23,7 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
           prerelease: ${{ contains(github.ref, 'rc') }}
-          body_path: ./release.md
+          body: ${{ steps.changelog.outputs.changelog }}  
       - name: Get manual
         run: wget https://github.com/votca/csg-manual/releases/download/v1.6.1/votca-csg-manual-1.6.1.pdf
       - name: Upload manual
