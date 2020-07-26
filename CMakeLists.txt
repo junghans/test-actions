@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 project(main LANGUAGES CXX)
-set(PROJECT_VERSION "1.7-dev")
+set(PROJECT_VERSION "1.6.2")
 
 add_executable(main main.cc)
 enable_testing()
