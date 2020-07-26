@@ -23,17 +23,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          release_name: ${{ github.ref }}
           prerelease: ${{ contains(github.ref, 'rc') }}
           body_path: 'release_changelog.md'
       - name: Get manual
-        run: wget https://github.com/votca/csg-manual/releases/download/v1.6.1/votca-csg-manual-1.6.1.pdf
+        run: wget https://github.com/votca/csg-manual/releases/download/v${{ github.ref }}/votca-csg-manual-${{ github.ref }}.pdf
       - name: Upload manual
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./votca-csg-manual-1.6.1.pdf
-          asset_name: votca-csg-manual-1.6.1.pdf
+          asset_path: ./votca-csg-manual-${{ github.ref }}.pdf
+          asset_name: votca-csg-manual-${{ github.ref }}.pdf
           asset_content_type: application/pdf
