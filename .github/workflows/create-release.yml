@@ -2,7 +2,7 @@ name: Make Release
 on:
   push:
     tags:
-    - 'v[1-9]*' # Push events to matching v*, i.e. v1.0, v20.15.10
+    - 'v[1-9]*'
 
 jobs:
   release:
