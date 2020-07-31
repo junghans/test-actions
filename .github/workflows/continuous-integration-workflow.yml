@@ -22,4 +22,4 @@ jobs:
         run: |
           cmake -B build
           make -C build
-          clang-format-8
+          clang-format-8 --version
