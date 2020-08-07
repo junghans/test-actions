@@ -22,4 +22,3 @@ jobs:
         run: |
           cmake -B build
           cmake --build build
-          exit 1
