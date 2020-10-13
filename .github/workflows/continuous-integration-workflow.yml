@@ -21,7 +21,15 @@ jobs:
         uses: actions/checkout@v2.2.0
       - name: Build
         run: |
-          sudo dnf install git cmake gcc
+          sudo mkdir -p /var/lib/yum/intel-icc
+          sudo pushd /var/lib/yum/intel-icc
+          sudo curl -O wget http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16756/parallel_studio_xe_2020_update2_professional_edition.tgz && \
+          sudo tar -xf parallel_studio_xe_*.tgz
+          sudo cd parallel_studio_xe_*/rpm
+          printf "[icc]\nname=icc\nbaseurl=$PWD\nenabled=1" | sudo tee -a /etc/yum.repos.d/icc.repo
+          sudo dnf -y update
+          sudo dnf --nogpgcheck -y install intel-parallel-studio-xe-icc intel-parallel-studio-xe-mkl
+          sudo dnf -y install gcc make cmake
           cmake -B build
           cmake --build build
           cd build && ctest
