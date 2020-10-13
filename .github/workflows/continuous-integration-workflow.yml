@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v2.2.0
       - name: Build
         run: |
-          curl -O wget http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16756/parallel_studio_xe_2020_update2_professional_edition.tgz && \
+          curl -O http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16756/parallel_studio_xe_2020_update2_professional_edition.tgz && \
           tar -xf parallel_studio_xe_*.tgz
           pushd parallel_studio_xe_*/rpm
           printf "[icc]\nname=icc\nbaseurl=$PWD\nenabled=1" | sudo tee -a /etc/yum.repos.d/icc.repo
