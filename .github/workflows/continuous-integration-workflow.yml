@@ -18,6 +18,9 @@ jobs:
           restore-keys: ccache 
       - name: Checkout code    
         uses: actions/checkout@v2.2.0
+      - name: Install Deps
+        run: |
+          sudo apt-get install latexmk pdflatex
       - name: Build
         run: |
           pdflatex --version
