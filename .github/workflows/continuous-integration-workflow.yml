@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v2.2.0
       - name: Install Deps
         run: |
-          sudo apt-get install latexmk pdflatex
+          sudo apt-get install latexmk
       - name: Build
         run: |
           pdflatex --version
