@@ -10,7 +10,6 @@ on:
 jobs:
   CI:
     runs-on: ubuntu-20.04
-    container: fedora:latest
     steps:
       - uses: actions/cache@v2
         with:
@@ -21,14 +20,7 @@ jobs:
         uses: actions/checkout@v2.2.0
       - name: Build
         run: |
-          curl -O http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16756/parallel_studio_xe_2020_update2_professional_edition.tgz && \
-          tar -xf parallel_studio_xe_*.tgz
-          pushd parallel_studio_xe_*/rpm
-          printf "[icc]\nname=icc\nbaseurl=$PWD\nenabled=1" | sudo tee -a /etc/yum.repos.d/icc.repo
-          popd
-          sudo dnf -y update
-          sudo dnf --nogpgcheck -y install intel-parallel-studio-xe-icc intel-parallel-studio-xe-mkl
-          sudo dnf -y install gcc make cmake
+          pdflatex --version
           cmake -B build
           cmake --build build
           cd build && ctest
