@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - fedora-rawhide
   pull_request:
     branches:
       - master
@@ -10,20 +11,11 @@ on:
 jobs:
   CI:
     runs-on: ubuntu-20.04
+    container: registry.fedoraproject.org/fedora:rawhide
     steps:
-      - uses: actions/cache@v2
-        with:
-          path: ~/.ccache
-          key: ccache-full  
-          restore-keys: ccache 
-      - name: Checkout code    
-        uses: actions/checkout@v2.2.0
-      - name: Install Deps
+      - name: Test faccessat
         run: |
-          sudo apt-get install latexmk
-      - name: Build
-        run: |
-          pdflatex --version
-          cmake -B build
-          cmake --build build
-          cd build && ctest
+          echo "echo test" > test.sh
+          chmod +x test.sh
+          ls -l test.sh
+          test -x test.sh
