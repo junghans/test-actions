@@ -13,22 +13,6 @@ jobs:
     runs-on: ubuntu-20.04
     container: registry.fedoraproject.org/fedora:rawhide
     steps:
-      - name: Build libseccomp
-        run: |
-          sudo apt-get install -y gperf
-
-          TarballUrl=$(curl -s https://api.github.com/repos/seccomp/libseccomp/releases/latest | jq -r '.tarball_url')
-          TarballPath="/tmp/libseccomp.tar.gz"
-
-          wget $TarballUrl -O $TarballPath
-          tar -xzvf $TarballPath -C /tmp
-
-          cd /tmp/seccomp*
-
-          autoreconf --install
-          ./configure
-          sudo make
-          sudo make install
       - name: Test faccessat
         run: |
           echo "echo test" > test.sh
