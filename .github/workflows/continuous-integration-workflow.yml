@@ -20,7 +20,7 @@ jobs:
       - name: Build
         run: |
           cmake -B build
-          cmake --build build
+          cmake --build build --verbose
           cd build && ctest
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v1
