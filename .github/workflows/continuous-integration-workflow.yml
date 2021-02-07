@@ -11,19 +11,16 @@ jobs:
   CI:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/cache@v2
-        with:
-          path: ~/.ccache
-          key: ccache-full  
-          restore-keys: ccache 
       - name: Checkout code    
-        uses: actions/checkout@v2.2.0
-      - name: Install Deps
-        run: |
-          sudo apt-get install latexmk
+        uses: actions/checkout@v2
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v1
+        with:
+          languages: cpp
       - name: Build
         run: |
-          pdflatex --version
           cmake -B build
           cmake --build build
           cd build && ctest
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v1
