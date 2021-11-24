@@ -9,10 +9,6 @@ on:
 
 jobs:
   CI:
-    if: ${{ matrix.word == "yes" }}
-    strategy:
-      matrix:
-        word: ['yes', 'no']
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout code    
