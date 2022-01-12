@@ -13,6 +13,7 @@ if(INJECT_MARCH_NATIVE)
 endif()
 
 add_executable(main main.cc)
+install(TARGETS main DESTINATION ${CMAKE_INSTALL_BINDIR})
 enable_testing()
 add_test(test1 main 1)
 add_test(test2 main 2)
