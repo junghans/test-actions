@@ -18,5 +18,6 @@ jobs:
         with:
           tags: junghans/test-actions:latest
           file: .github/workflows/Dockerfile
+          context: .
           pull: true
           push: false
