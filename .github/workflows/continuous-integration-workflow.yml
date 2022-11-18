@@ -9,13 +9,14 @@ on:
 
 jobs:
   CI:
-    runs-on: ubuntu-20.04
-    container: ghcr.io/votca/buildenv/ubuntu:latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code    
         uses: actions/checkout@v2
-      - name: Build
-        run: |
-          cmake -B build
-          cmake --build build --verbose
-          cd build && ctest
+      - name: Build and Push Docker images for all Container Registries
+        uses: docker/build-push-action@v3       
+        with:
+          tags: junghans/test-actions:latest
+          file: .github/workflows/Dockerfile
+          pull: true
+          push: false
