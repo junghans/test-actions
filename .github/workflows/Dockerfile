@@ -1,5 +1,8 @@
 FROM ghcr.io/votca/buildenv/fedora:latest
 
+COPY votca/ /home/votca/votca
+RUN sudo chown -R votca:votca /home/votca/votca
+
 RUN pwd
 RUN ls
 
