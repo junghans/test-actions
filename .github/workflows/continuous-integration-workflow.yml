@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout code    
         uses: actions/checkout@v2
+        with:
+          path: votca
       - name: Build and Push Docker images for all Container Registries
         uses: docker/build-push-action@v3       
         with:
