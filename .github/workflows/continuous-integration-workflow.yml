@@ -19,7 +19,7 @@ jobs:
         uses: docker/build-push-action@v3       
         with:
           tags: junghans/test-actions:latest
-          file: .github/workflows/Dockerfile
+          file: votca/.github/workflows/Dockerfile
           context: .
           pull: true
           push: false
