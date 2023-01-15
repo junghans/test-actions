@@ -5,7 +5,7 @@ on:
 jobs:
   edit:
     name: clang-format
-    if: ${{ github.event.comment.body == '@votca-bot format' }}
+    if: ${{ github.event.comment.body == 'magic format' }}
     runs-on: ubuntu-latest
     container: ghcr.io/votca/buildenv/format:latest
     steps:
