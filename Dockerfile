@@ -16,8 +16,9 @@ COPY . /home/user/code
 RUN sudo chown -R user:user /home/user/code
 
 RUN pwd
+RUN uname -a
 RUN ls -R
 
 RUN cmake -B builddir -S code && \
-    cmake --build builddir && \
+    cmake --build builddir --verbose && \
     cmake --build builddir --target test
