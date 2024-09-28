@@ -13,7 +13,10 @@ concurrency:
 
 jobs:
   CI:
-    runs-on: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
     steps:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
