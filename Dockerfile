@@ -11,6 +11,10 @@ RUN useradd -m -G wheel -u 1001 user
 RUN echo '%wheel ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER user
 WORKDIR /home/user
+
+COPY . /home/user/code
+RUN sudo chown -R user:user /home/user/code
+
 RUN pwd
 RUN ls -R
 
