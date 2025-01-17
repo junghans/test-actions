@@ -8,9 +8,10 @@ FROM registry.fedoraproject.org/fedora:${TAG}
 #    dnf clean all
 
 RUN useradd -m -G wheel -u 1001 user
-RUN echo '%wheel ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+RUN echo '%wheel ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers.d/user
 RUN cat /etc/sudoers
 RUN ls -R /etc/sudoers.d/
+RUN cat /etc/sudoers.d/user
 USER user
 WORKDIR /home/user
 RUN sudo whoami
