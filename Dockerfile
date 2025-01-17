@@ -14,6 +14,7 @@ RUN ls -R /etc/sudoers.d/
 RUN cat /etc/sudoers.d/user
 USER user
 WORKDIR /home/user
+RUN whoami
 RUN sudo whoami
 
 COPY . /home/user/code
