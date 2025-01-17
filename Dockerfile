@@ -13,6 +13,7 @@ RUN cat /etc/sudoers
 # RUN echo '%wheel ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER user
 WORKDIR /home/user
+RUN sudo whoami
 
 COPY . /home/user/code
 RUN sudo chown -R user:user /home/user/code
