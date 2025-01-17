@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - PAM_error
   pull_request:
     branches:
       - master
@@ -22,7 +23,6 @@ jobs:
       - name: Build and Push Docker images for all Container Registries
         uses: docker/build-push-action@v6
         with:
-          tags: test:latest 
           file: Dockerfile 
           pull: true
-          push: false 
+          push: false
