@@ -42,6 +42,7 @@ jobs:
           pull: true
           push: true
   merge-docker-manifest:
+    runs-on: ubuntu-latest
     needs: CI
     steps:
       - name: Create and push manifest images
