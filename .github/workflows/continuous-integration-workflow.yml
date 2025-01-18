@@ -14,7 +14,13 @@ concurrency:
 
 jobs:
   CI:
-    runs-on: [ubuntu-latest, ubuntu-24.04-arm]
+    continue-on-error: ${{ matrix.config.continue-on-error == 'true' }}
+    strategy:
+      matrix:
+        config:
+          - {arm: 'false'}
+          - {arm: 'true'}
+    runs-on: ${{ matrix.config.arm == 'true' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
     steps:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
