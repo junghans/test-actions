@@ -18,9 +18,9 @@ jobs:
     strategy:
       matrix:
         config:
-          - {arm: 'false'}
-          - {arm: 'true'}
-    runs-on: ${{ matrix.config.arm == 'true' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
+          - {arch: 'arm64'}
+          - {arch: 'amd64'}
+    runs-on: ${{ matrix.config.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
     steps:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -37,7 +37,16 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           tags: |
-            ghcr.io/junghans/test-actions/ci:latest
+            ghcr.io/junghans/test-actions/ci:latest-${{matrix.config.arch}}
           file: Dockerfile 
           pull: true
+          push: true
+  merge-docker-manifest:
+    needs: CI
+    steps:
+      - name: Create and push manifest images
+        uses: Noelware/docker-manifest-action@master # or use a pinned version in the Releases tab
+        with:
+          inputs: ghcr.io/junghans/test-actions/ci:latest
+          images: ghcr.io/junghans/test-actions/ci-amd64,ghcr.io/junghans/test-actions/ci-arm64
           push: true
