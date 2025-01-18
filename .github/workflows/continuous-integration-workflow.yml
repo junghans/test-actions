@@ -34,4 +34,4 @@ jobs:
             ghcr.io/junghans/test-actions/ci:latest
           file: Dockerfile 
           pull: true
-          push: false
+          push: true
