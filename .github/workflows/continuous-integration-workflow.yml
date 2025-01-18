@@ -49,5 +49,5 @@ jobs:
         uses: Noelware/docker-manifest-action@master # or use a pinned version in the Releases tab
         with:
           inputs: ghcr.io/junghans/test-actions/ci:latest
-          images: ghcr.io/junghans/test-actions/ci-amd64,ghcr.io/junghans/test-actions/ci-arm64
+          images: ghcr.io/junghans/test-actions/ci:latest-amd64,ghcr.io/junghans/test-actions/ci:latest-arm64
           push: true
